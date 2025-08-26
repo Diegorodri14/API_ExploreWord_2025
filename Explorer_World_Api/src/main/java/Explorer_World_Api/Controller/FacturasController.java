@@ -1,10 +1,7 @@
 package Explorer_World_Api.Controller;
 
-import Explorer_World_Api.Exceptions.ExcepcionClienteNoRegistrado;
 import Explorer_World_Api.Exceptions.ExcepcionFacturaNoRegistrado;
 import Explorer_World_Api.Exceptions.ExceptionDatosDuplicados;
-import Explorer_World_Api.Model.DTO.ClienteDTO;
-import Explorer_World_Api.Model.DTO.EventosDTO;
 import Explorer_World_Api.Model.DTO.FacturasDTO;
 import Explorer_World_Api.Service.FacturasService;
 import jakarta.servlet.http.HttpServletRequest;

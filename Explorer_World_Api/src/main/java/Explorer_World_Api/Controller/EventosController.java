@@ -118,7 +118,7 @@ public class EventosController {
             }
             return ResponseEntity.ok().body(Map.of(
                     "status", "Success",
-                    "message", "Usuario eliminado exitosamente"
+                    "message", "Evento a sido eliminado exitosamente"
             ));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of(
