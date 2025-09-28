@@ -40,5 +40,7 @@ public class EventosEntity {
     @Column(name = "DESCRIPCIONEVENTO")
     private String DescripcionEvento;
 
+    @Column(name = "IMAGE_URL")
+    private String image_url;
 
 }

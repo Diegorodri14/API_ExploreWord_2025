@@ -32,4 +32,7 @@ public class TransporteDTO {
 
     @NotBlank
     private String EstadoTransporte;
+
+    @NotBlank
+    private String Image_url;
 }

@@ -76,6 +76,7 @@ public class EventosService {
         entity.setLugarEvento(data.getLugarEvento());
         entity.setFechaEvento(data.getFechaEvento());
         entity.setDescripcionEvento(data.getDescripcionEvento());
+        entity.setImage_url(data.getImage_url());
         return entity;
     }
 
@@ -94,6 +95,7 @@ public class EventosService {
         dto.setLugarEvento(rangoEntity.getLugarEvento());
         dto.setFechaEvento(rangoEntity.getFechaEvento());
         dto.setDescripcionEvento(rangoEntity.getDescripcionEvento());
+        dto.setImage_url(rangoEntity.getImage_url());
         return dto;
     }
 
@@ -107,6 +109,7 @@ public class EventosService {
         existente.setLugarEvento(json.getLugarEvento());
         existente.setFechaEvento(json.getFechaEvento());
         existente.setDescripcionEvento(json.getDescripcionEvento());
+        existente.setImage_url(json.getImage_url());
 
         EventosEntity actualizado = repo.save(existente);
         return ConvertirADTO(actualizado);

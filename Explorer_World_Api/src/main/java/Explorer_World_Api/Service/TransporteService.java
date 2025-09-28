@@ -48,6 +48,7 @@ public class TransporteService {
         dto.setModeloTransporte(transporte.getModeloTransporte());
         dto.setPlacaTransporte(transporte.getPlacaTransporte());
         dto.setEstadoTransporte(transporte.getEstadoTransporte());
+        dto.setImage_url(transporte.getImage_url());
         return dto;
     }
 
@@ -75,6 +76,7 @@ public class TransporteService {
         entity.setModeloTransporte(datos.getModeloTransporte());
         entity.setPlacaTransporte(datos.getPlacaTransporte());
         entity.setEstadoTransporte(datos.getEstadoTransporte());
+        entity.setImage_url(datos.getImage_url());
         return entity;
     }
 
@@ -85,6 +87,8 @@ public class TransporteService {
         transporte.setModeloTransporte(json.getModeloTransporte());
         transporte.setPlacaTransporte(json.getPlacaTransporte());
         transporte.setEstadoTransporte(json.getEstadoTransporte());
+        transporte.setImage_url(json.getImage_url());
+
         TransporteEntity TransporteActualizado = repository.save(transporte);
         return ConvertirADTO(TransporteActualizado);
     }

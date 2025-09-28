@@ -28,4 +28,7 @@ public class DestinosDTO {
 
     @Size(max = 200, message = "La descripción no puede exceder los 200 caracteres")
     private String descripcionDestino;
+
+    @NotBlank
+    private  String image_url;
 }

@@ -35,5 +35,7 @@ public class EventosDTO {
     @NotBlank
     private String DescripcionEvento;
 
+    @NotBlank
+    private  String image_url;
 
 }

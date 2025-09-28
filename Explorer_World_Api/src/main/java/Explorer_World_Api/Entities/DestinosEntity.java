@@ -30,4 +30,7 @@ public class DestinosEntity {
 
     @Column(name = "DESCRIPCIONDESTINO", length = 200)
     private String descripcionDestino;
+
+    @Column(name  = "IMAGE_URL")
+    private String image_url;
 }

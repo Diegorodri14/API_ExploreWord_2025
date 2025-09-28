@@ -1,6 +1,7 @@
 package Explorer_World_Api.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class TransporteEntity {
 
-     @Id @Column(name = "IDTRANSPORTE")
+    @Id @Column(name = "IDTRANSPORTE")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_Transporte")
     @SequenceGenerator(name = "sq_Transporte", sequenceName = "sq_Transporte", allocationSize = 1)
     private Long IdTransporte;
@@ -33,5 +34,8 @@ public class TransporteEntity {
 
      @Column(name = "ESTADOTRANSPORTE")
     private String EstadoTransporte;
+
+    @Column(name = "IMAGE_URL")
+    private String image_url;
 
 }
