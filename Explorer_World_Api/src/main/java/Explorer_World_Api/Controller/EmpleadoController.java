@@ -1,9 +1,14 @@
 package Explorer_World_Api.Controller;
 
+import Explorer_World_Api.Entities.DestinosEntity;
+import Explorer_World_Api.Entities.EmpleadoEntity;
 import Explorer_World_Api.Exceptions.ExcepcionEmpleadoNoRegistrado;
 import Explorer_World_Api.Exceptions.ExceptionDatosDuplicados;
 import Explorer_World_Api.Model.DTO.DestinosDTO;
 import Explorer_World_Api.Model.DTO.EmpleadoDTO;
+import Explorer_World_Api.Repositories.DestinosRepository;
+import Explorer_World_Api.Repositories.EmpleadoRepository;
+import Explorer_World_Api.Service.Cloudinary.CloudinaryService;
 import Explorer_World_Api.Service.EmpleadoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -13,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +31,10 @@ import java.util.Map;
 public class EmpleadoController {
     @Autowired
     private EmpleadoService service;
+    @Autowired
+    private CloudinaryService cloudinaryService;
+    @Autowired
+    private EmpleadoRepository empleadoRepository;
 
     //-----------Paginacion
     @GetMapping("/ListaEmpleado")
@@ -144,6 +155,35 @@ public class EmpleadoController {
                     "message", "Error al eliminar el Empleado",
                     "details", e.getMessage()
             ));
+        }
+    }
+
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<?> uploadImageToEmpleados(
+            @PathVariable Long id,
+            @RequestParam("image") MultipartFile file
+    ) {
+        try {
+            EmpleadoEntity empleado = empleadoRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+
+            // Subir imagen a la carpeta "EmpleadosExpo"
+            String imageUrl = cloudinaryService.uploadImage(file, "EmpleadosExpo");
+
+            empleado.setImage_url(imageUrl);
+            empleadoRepository.save(empleado);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Imagen subida y asociada al empleado exitosamente",
+                    "url", imageUrl
+            ));
+        } catch (IOException e) {
+            e.printStackTrace(); // Esto imprime la traza completa en la consola
+            return ResponseEntity.internalServerError()
+                    .body("Error al subir la imagen: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Archivo inválido: " + e.getMessage());
         }
     }
 }

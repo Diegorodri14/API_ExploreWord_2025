@@ -40,7 +40,7 @@ public class EventosEntity {
     @Column(name = "DESCRIPCIONEVENTO")
     private String DescripcionEvento;
 
-    @Column(name = "IMAGE_URL")
+    @Column(name = "IMAGE_URL", length = 500)
     private String image_url;
 
 }

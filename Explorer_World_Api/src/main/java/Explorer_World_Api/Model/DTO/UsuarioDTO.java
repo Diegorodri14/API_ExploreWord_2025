@@ -1,5 +1,6 @@
 package Explorer_World_Api.Model.DTO;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,4 +35,7 @@ public class UsuarioDTO {
     @Email(message = "Debe ser un correo electrónico válido")
     @Size(max = 50, message = "El correo no puede exceder los 50 caracteres")
     private String Correo;
+
+    @Column(name  = "IMAGE_URL")
+    private String image_url;
 }

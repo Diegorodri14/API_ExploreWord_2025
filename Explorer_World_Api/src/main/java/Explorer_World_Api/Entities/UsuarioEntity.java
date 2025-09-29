@@ -34,4 +34,7 @@ public class UsuarioEntity {
 
     @Column(name = "CORREO")
     private String Correo;
+
+    @Column(name = "IMAGE_URL", length = 500)
+    private String image_url;
 }

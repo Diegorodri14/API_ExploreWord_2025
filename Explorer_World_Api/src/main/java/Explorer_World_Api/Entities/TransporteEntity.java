@@ -35,7 +35,7 @@ public class TransporteEntity {
      @Column(name = "ESTADOTRANSPORTE")
     private String EstadoTransporte;
 
-    @Column(name = "IMAGE_URL")
+    @Column(name = "IMAGE_URL", length = 500)
     private String image_url;
 
 }

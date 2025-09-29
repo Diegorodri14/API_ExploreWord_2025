@@ -22,7 +22,6 @@ public class CloudinaryController {
         }
 
         @PostMapping("/upload")
-
         public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) {
             try{
                 //Llamando al servicio para subir la imagen y obtener la URL

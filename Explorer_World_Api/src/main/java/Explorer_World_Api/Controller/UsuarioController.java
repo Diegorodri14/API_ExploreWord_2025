@@ -1,9 +1,14 @@
 package Explorer_World_Api.Controller;
 
+import Explorer_World_Api.Entities.TransporteEntity;
+import Explorer_World_Api.Entities.UsuarioEntity;
 import Explorer_World_Api.Exceptions.ExcepcionUsuarioNoRegistrado;
 import Explorer_World_Api.Exceptions.ExceptionDatosDuplicados;
 import Explorer_World_Api.Model.DTO.TransporteDTO;
 import Explorer_World_Api.Model.DTO.UsuarioDTO;
+import Explorer_World_Api.Repositories.TransporteRepository;
+import Explorer_World_Api.Repositories.UsuarioRepository;
+import Explorer_World_Api.Service.Cloudinary.CloudinaryService;
 import Explorer_World_Api.Service.UsuarioService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -13,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +32,10 @@ public class UsuarioController {
 
     @Autowired
     UsuarioService service;
+    @Autowired
+    private CloudinaryService cloudinaryService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     //-----------Paginacion
     @GetMapping("/ListaUsuario")
@@ -143,6 +154,35 @@ public class UsuarioController {
                     "message", "Error al eliminar el usuario",
                     "details", e.getMessage()
             ));
+        }
+    }
+
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<?> uploadImageToEmpleados(
+            @PathVariable Long id,
+            @RequestParam("image") MultipartFile file
+    ) {
+        try {
+            UsuarioEntity usuario = usuarioRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("usuario no encontrado"));
+
+            // Subir imagen a la carpeta "UsuariosExpo"
+            String imageUrl = cloudinaryService.uploadImage(file, "UsuariosExpo");
+
+            usuario.setImage_url(imageUrl);
+            usuarioRepository.save(usuario);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Imagen subida y asociada al usuario exitosamente",
+                    "url", imageUrl
+            ));
+        } catch (IOException e) {
+            e.printStackTrace(); // Esto imprime la traza completa en la consola
+            return ResponseEntity.internalServerError()
+                    .body("Error al subir la imagen: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Archivo inválido: " + e.getMessage());
         }
     }
 }

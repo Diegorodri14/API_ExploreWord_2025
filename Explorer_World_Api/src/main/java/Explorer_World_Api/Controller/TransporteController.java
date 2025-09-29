@@ -1,9 +1,14 @@
 package Explorer_World_Api.Controller;
 
+import Explorer_World_Api.Entities.EventosEntity;
+import Explorer_World_Api.Entities.TransporteEntity;
 import Explorer_World_Api.Exceptions.ExceptionDatosDuplicados;
 import Explorer_World_Api.Exceptions.ExceptionTransporteNoEncontrado;
 import Explorer_World_Api.Model.DTO.ServiciosDTO;
 import Explorer_World_Api.Model.DTO.TransporteDTO;
+import Explorer_World_Api.Repositories.EventosRepository;
+import Explorer_World_Api.Repositories.TransporteRepository;
+import Explorer_World_Api.Service.Cloudinary.CloudinaryService;
 import Explorer_World_Api.Service.TransporteService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -13,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +32,10 @@ public class TransporteController {
 
     @Autowired
     TransporteService service;
+    @Autowired
+    private CloudinaryService cloudinaryService;
+    @Autowired
+    private TransporteRepository transporteRepository;
 
     //-----------Paginacion
     @GetMapping("/ListaTransporte")
@@ -129,5 +140,32 @@ public class TransporteController {
         }
     }
 
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<?> uploadImageToEmpleados(
+            @PathVariable Long id,
+            @RequestParam("image") MultipartFile file
+    ) {
+        try {
+            TransporteEntity transporte = transporteRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Transporte no encontrado"));
 
+            // Subir imagen a la carpeta "TransporteExpo"
+            String imageUrl = cloudinaryService.uploadImage(file, "TransporteExpo");
+
+            transporte.setImage_url(imageUrl);
+            transporteRepository.save(transporte);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Imagen subida y asociada al transporte exitosamente",
+                    "url", imageUrl
+            ));
+        } catch (IOException e) {
+            e.printStackTrace(); // Esto imprime la traza completa en la consola
+            return ResponseEntity.internalServerError()
+                    .body("Error al subir la imagen: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Archivo inválido: " + e.getMessage());
+        }
+    }
 }

@@ -1,11 +1,14 @@
 package Explorer_World_Api.Controller;
 
+import Explorer_World_Api.Entities.DestinosEntity;
 import Explorer_World_Api.Exceptions.ExcepcionClienteNoRegistrado;
 import Explorer_World_Api.Exceptions.ExcepcionDestinoNoRegistrado;
 import Explorer_World_Api.Exceptions.ExceptionDatosDuplicados;
 import Explorer_World_Api.Model.DTO.ClienteDTO;
 import Explorer_World_Api.Model.DTO.DestinosDTO;
+import Explorer_World_Api.Repositories.DestinosRepository;
 import Explorer_World_Api.Service.ClienteService;
+import Explorer_World_Api.Service.Cloudinary.CloudinaryService;
 import Explorer_World_Api.Service.DestinosService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -15,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +31,10 @@ import java.util.Map;
 public class DestinosController {
     @Autowired
     private DestinosService service;
+    @Autowired
+    private CloudinaryService cloudinaryService;
+    @Autowired
+    private DestinosRepository destinosRepository;
 
     //-----------Paginacion
     @GetMapping("/ListaDestino")
@@ -146,4 +155,36 @@ public class DestinosController {
             ));
         }
     }
+
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<?> uploadImageToDestino(
+            @PathVariable Long id,
+            @RequestParam("image") MultipartFile file
+    ) {
+        try {
+            DestinosEntity destino = destinosRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Destino no encontrado"));
+
+            // Subir imagen a la carpeta "DestinosExpo"
+            String imageUrl = cloudinaryService.uploadImage(file, "DestinosExpo");
+
+            destino.setImage_url(imageUrl);
+            destinosRepository.save(destino);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Imagen subida y asociada al destino exitosamente",
+                    "url", imageUrl
+            ));
+        } catch (IOException e) {
+            e.printStackTrace(); // Esto imprime la traza completa en la consola
+            return ResponseEntity.internalServerError()
+                    .body("Error al subir la imagen: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Archivo inválido: " + e.getMessage());
+        }
+    }
+
+
+
 }
