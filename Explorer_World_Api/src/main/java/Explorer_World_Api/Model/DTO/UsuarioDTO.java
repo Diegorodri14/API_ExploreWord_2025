@@ -13,28 +13,26 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class UsuarioDTO {
 
-    private Long IdUsuario;
+    private Long idUsuario;
 
-    @NotNull(message = "El rango no puede ser nulo")
     @Positive(message = "El ID del rango debe ser positivo")
-    private Long IdRango;
+    private Long idRango;
 
-    @NotBlank(message = "El estado no puede estar vacío")
+
     @Size(max = 20, message = "El estado no puede exceder los 20 caracteres")
-    private String Estado;
+    private String estado;
 
-    @NotBlank(message = "El usuario no puede estar vacío")
+
     @Size(max = 50, message = "El usuario no puede exceder los 50 caracteres")
-    private String Usuario;
+    private String usuario;
 
-    @NotBlank(message = "La contraseña no puede estar vacía")
     @Size(min = 8, max = 50, message = "La contraseña debe tener entre 8 y 50 caracteres")
-    private String Contrasena;
+    private String contrasena;
 
-    @NotBlank(message = "El correo no puede estar vacío")
+
     @Email(message = "Debe ser un correo electrónico válido")
     @Size(max = 50, message = "El correo no puede exceder los 50 caracteres")
-    private String Correo;
+    private String correo;
 
     @Column(name  = "IMAGE_URL")
     private String image_url;

@@ -71,7 +71,6 @@ public class RangoService {
         RangoEntity entity = new RangoEntity();
         entity.setIdRango(data.getIdRango());
         entity.setNombreRango(data.getNombreRango());
-        entity.setRangoUsuario(data.getRangoUsuario());
         return entity;
     }
 
@@ -85,7 +84,6 @@ public class RangoService {
         RangoDTO dto = new RangoDTO();
         dto.setIdRango(rangoEntity.getIdRango());
         dto.setNombreRango(rangoEntity.getNombreRango());
-        dto.setRangoUsuario(rangoEntity.getRangoUsuario());
         return dto;
     }
 
@@ -94,7 +92,6 @@ public class RangoService {
         RangoEntity existente = repo.findById(id).orElseThrow(() -> new ExceptionRangoNoRegistrado("Rango no encontrado"));
 
         existente.setNombreRango(json.getNombreRango());
-        existente.setRangoUsuario(json.getRangoUsuario());
 
         RangoEntity actualizado = repo.save(existente);
         return ConvertirADTO(actualizado);

@@ -10,7 +10,6 @@ import lombok.ToString;
 @Table(name = "Usuarios")
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 public class UsuarioEntity {
 
@@ -18,23 +17,38 @@ public class UsuarioEntity {
     @Column(name = "IDUSUARIO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_Usuarios")
     @SequenceGenerator(name = "sq_Usuarios", sequenceName = "sq_Usuarios", allocationSize = 1)
-    private Long IdUsuario;
+    private Long idUsuario;
 
-    @Column(name = "IDRANGO")
-    private Long IdRango;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IDRANGO", referencedColumnName = "IDRANGO")
+    private RangoEntity rangoUsuario;
 
     @Column(name = "ESTADO")
-    private String Estado;
+    private String estado;
 
     @Column(name = "USUARIO")
-    private String Usuario;
+    private String usuario;
 
     @Column(name = "CONTRASENA")
-    private String Contrasena;
+    private String contrasena;
 
     @Column(name = "CORREO")
-    private String Correo;
+    private String correo;
 
     @Column(name = "IMAGE_URL", length = 500)
     private String image_url;
+
+    @Override
+    public String toString() {
+        return "UsuarioEntity{" +
+                "idUsuario=" + idUsuario +
+                ", rangoUsuario=" + rangoUsuario +
+                ", estado='" + estado + '\'' +
+                ", usuario='" + usuario + '\'' +
+                ", contrasena='" + contrasena + '\'' +
+                ", correo='" + correo + '\'' +
+                ", image_url='" + image_url + '\'' +
+                '}';
+    }
 }

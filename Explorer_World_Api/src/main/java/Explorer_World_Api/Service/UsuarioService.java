@@ -68,7 +68,6 @@ public class UsuarioService {
     private UsuarioEntity convertirAEntity(UsuarioDTO data) {
         UsuarioEntity entity = new UsuarioEntity();
         entity.setIdUsuario(data.getIdUsuario());
-        entity.setIdRango(data.getIdRango());
         entity.setEstado(data.getEstado());
         entity.setUsuario(data.getUsuario());
         entity.setContrasena(data.getContrasena());
@@ -85,7 +84,6 @@ public class UsuarioService {
     private UsuarioDTO convertirADTO(UsuarioEntity usuarioEntity) {
         UsuarioDTO dto = new UsuarioDTO();
         dto.setIdUsuario(usuarioEntity.getIdUsuario());
-        dto.setIdRango(usuarioEntity.getIdRango());
         dto.setEstado(usuarioEntity.getEstado());
         dto.setUsuario(usuarioEntity.getUsuario());
         dto.setContrasena(usuarioEntity.getContrasena());
@@ -97,7 +95,6 @@ public class UsuarioService {
     public UsuarioDTO modificarUsuario(Long id, @Valid UsuarioDTO json) {
         UsuarioEntity existente = repo.findById(id).orElseThrow(() -> new ExcepcionUsuarioNoRegistrado("Usuario no encontrado"));
 
-        existente.setIdRango(json.getIdRango());
         existente.setEstado(json.getEstado());
         existente.setUsuario(json.getUsuario());
         existente.setContrasena(json.getContrasena());
